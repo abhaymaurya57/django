@@ -1,0 +1,79 @@
+{% load static tailwind_tags %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% block title %}
+        Default value
+        {% endblock  %}
+    </title>
+    <link rel="stylesheet" href="{% static "style.css" %}" >
+    {% tailwind_css %}
+</head>
+
+
+<body >
+{% block navbar %}
+<nav >
+    <div class="navbar">
+        <div class="navdiv">
+            <div class="logo">
+                <img src="{% static 'images/me.jpg' %}" alt="Image">
+            </div>
+                <ul class='nav'>
+                    <li><a href="/home">Home</a></li>
+                    <li><a href="/about">About</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                    <li><a href="/skill">Skill</a></li>
+                    <button><a href="/signin">SignIn</a></button>
+                    <button><a href="/signup">SignUp</a></button>
+                </ul>
+            <div class="logo lower">
+                <img src="{% static 'images/logo.png' %}" alt="Image">
+            </div>
+        </div>   
+</nav>
+
+{% block content %}
+<h1 class="content">Welcome To My Profile</h1>
+{% endblock  %}
+{% endblock  %}
+
+
+<div class="midle">
+    {% block leftside %}
+        <div class="leftside">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ratione iure eligendi tempora, iste officia sapiente hic distinctio velit nisi est eum delectus itaque exercitationem dolorem quas quidem quae reiciendis. Modi!
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus neque similique rem vero, expedita totam eius molestiae voluptates dolore consequatur nobis esse, repudiandae nihil aperiam voluptas eos iste blanditiis deserunt!
+        </div>
+    {% endblock  %}
+
+
+    {% block inside %}
+         midle
+    {% endblock  %}
+
+    {% block midlerightside %}
+        <div class="midleright">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque corporis quis vero aperiam quaerat odio nam commodi ab fugit aut architecto deleniti debitis animi nulla nisi 
+            Quia ut, laborum itaque fuga consectetur dolores repudiandae doloremque hic impedit doloribus voluptates, maxime tenetur dolore molestiae error tempore ad harum consequuntur, 
+        </div>
+    {% endblock  %}
+</div>
+
+<footer>
+    <div class="footer">
+        
+        Fuga, quis blanditiis quidem, quia perferendis quisquam atque quaerat sunt asperiores ipsum ullam sapiente similique ex, optio deleniti aperiam et eum necessitatibus? Atque id esse, quasi neque iusto ad praesentium?
+        Provident dolores deserunt fuga error tempore sint vel, placeat dolorum perspiciatis est labore autem maiores illum similique asperiores facere. Iste, iure incidunt at ad expedita quia necessitatibus sunt sed ipsa!
+        Sapiente neque ipsum aliquam ad ex molestiae officia provident vel, veniam, cumque distinctio voluptas non maiores repellendus minus? Esse dolorum sunt tempore debitis voluptas eligendi maxime aperiam molestias nesciunt expedita?
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit, alias iusto cumque saepe culpa dolor earum sapiente fuga minus praesentium sequi fugit ad eos deleniti aperiam nulla vel cum. Libero.
+    </div>
+</footer>
+ 
+</body>
+</html>

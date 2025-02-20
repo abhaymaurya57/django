@@ -1,0 +1,15 @@
+{% extends "chek.html" %}
+ 
+{% block content %}
+<h1 class="">all chai for you</h1>
+<div class="grid grid gap-4 m-4 ">
+{% for chai in  chais %}
+
+<div class='chai-item'>
+    <img src="{{chai.image.url}}" alt="" class="">
+
+
+{% endfor  %}
+</div>
+{% endblock  %}
+</div>
