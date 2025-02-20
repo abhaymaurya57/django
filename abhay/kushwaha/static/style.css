@@ -27,10 +27,18 @@ ul{
     padding-inline: var(--pading-inline-section);
 }
 .navbar{
-    padding-right: 15px;
-    padding-left: 15px;
+    /* padding-right: 15px;
+    padding-left: 15px; */
     background: rgb(59, 46, 48);
     font-family:serif;
+     height: 56px;
+    /* background-color: #fff; */
+    display: block;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 4;
+    
 }
 .navdiv{
    display: flex;
