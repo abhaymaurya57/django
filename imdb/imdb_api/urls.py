@@ -17,8 +17,8 @@ urlpatterns = [
     
     path('list/',views.movie_list,name='watchlist-list'),
     path('list/<int:pk>',views.movie_detail,name='watchlist-detail'),
-    path('stream/',views.StreamPlatformList.as_views(),name = 'streamplatform-list'),
-    path('stream/<int:pk>',views.StreamPlatformDetail.as_views(),name = 'streamplatform-detail'),
+    # path('stream/',views.StreamPlatformList.as_views(),name = 'streamplatform-list'),
+    # path('stream/<int:pk>',views.StreamPlatformDetail.as_views(),name = 'streamplatform-detail'),
     path('', views.api_root),
 ]
  
