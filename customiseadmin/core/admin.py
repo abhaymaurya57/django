@@ -19,6 +19,7 @@ class CourceAdmin(admin.ModelAdmin):
     # list_display_links=('price','publish_date','author')
     list_editable=('price','status','author','present')
     list_filter=("price",'author',)
+    ordering=("publish_date",)
 
     @admin.display(boolean=True,description="New")
     def full_title(self,obj):
