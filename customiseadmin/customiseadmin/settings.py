@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'core',
     'core1',
+    'core2',
 ]
 
 MIDDLEWARE = [
@@ -52,6 +53,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'customiseadmin.urls'
+AUTH_USER_MODEL = 'core2.CustomUser'
 
 TEMPLATES = [
     {
