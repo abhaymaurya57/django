@@ -4,7 +4,8 @@ from .models import Course,Lesson
 admin.site.site_header = "Custom Admin Project"
 admin.site.site_title="Coustom Admin"
 
-
+class LessonInline(admin.StackedInline):
+    model=Lesson
 class CourceAdmin(admin.ModelAdmin):
     list_display=('title','publish_date','price','author','status','full_title','present','capital_title')
     search_fields=('price','author','status')
@@ -17,10 +18,11 @@ class CourceAdmin(admin.ModelAdmin):
     # }))
 
     # list_display_links=('price','publish_date','author')
-    list_editable=('price','status','author','present')
+    list_editable=('price','status','author')
     list_filter=("price",'author',)
     ordering=("publish_date",)
-
+    inlines=(LessonInline,)
+    # list_per_page=3
     @admin.display(boolean=True,description="New")
     def full_title(self,obj):
         return  True #f"{obj.title}-{obj.price}"
