@@ -1,8 +1,11 @@
 from django.contrib import admin
 from .models import Course,Lesson
 # Register your models here.
-admin.site.site_header = "Custom Admin Project"
+admin.site.site_header = "Abhay"
 admin.site.site_title="Coustom Admin"
+admin.site.index_title="Abhay"
+admin.site.name="abhay"
+# admin.site.login_template="Abhay"
 
 class LessonInline(admin.StackedInline):
     model=Lesson
