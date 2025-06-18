@@ -12,9 +12,8 @@ from rest_framework.permissions import IsAuthenticated
 # Create your views here.
 
 def get_tokens_for_user(user):
-    if not user.is_active:
+    if not user.is_active:     
       raise AuthenticationFailed("User is not active")
-
     refresh = RefreshToken.for_user(user)
 
     return {
@@ -85,3 +84,19 @@ class UserPasswordResetView(APIView):
         serializer = UserPasswordResetSerializer(data=request.data,context={'uid':uid,'token':token})
         if serializer.is_valid(raise_exception=True):
             return Response({'msg':'password reset successfully'},status=status.HTTP_200_OK)
+
+
+from django.shortcuts import render
+
+def register_template_view(request):
+    return render(request, 'register.html')
+def login_template_view(request):
+    return render(request, 'login.html')
+def profile_template_view(request):
+    return render(request, 'profile.html')
+def change_password_view(request):
+    return render(request, 'change_password.html')
+def send_reset_email_view(request):
+    return render(request, 'send_reset_email.html')
+def reset_password_template_view(request, uid, token):
+    return render(request, 'reset_password.html', {'uid': uid, 'token': token})

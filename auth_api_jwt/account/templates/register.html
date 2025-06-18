@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Register</title>
+</head>
+<body>
+  <h2>User Registration</h2>
+  <form id="registerForm">
+    <input type="text" id="name" name="name" placeholder="Name" required><br>
+    <input type="email" id="email" name="email" placeholder="Email" required><br>
+    <input type="password" id="password" name="password" placeholder="Password" required><br>
+    <input type="password" id="password2" name="password2" placeholder="Confirm Password" required><br>
+    <label><input type="checkbox" id="tc" name="tc" required> I accept terms & conditions</label><br>
+    <button type="submit">Register</button>
+  </form>
+
+  <p id="result"></p> <!-- ✅ should match JS -->
+
+  <script>
+    const form = document.getElementById("registerForm");
+    const result = document.getElementById("result");
+
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const data = {
+            email: document.getElementById("email").value,
+            name: document.getElementById("name").value,
+            password: document.getElementById("password").value,
+            password2: document.getElementById("password2").value,
+            tc: document.getElementById("tc").checked
+        };
+
+        const response = await fetch("http://127.0.0.1:8000/api/user/register/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
+
+        const resData = await response.json();
+        if (response.ok) {
+            result.innerText = "✅ " + resData.msg;
+            setTimeout(() => {
+                window.location.href = "/login-form/";
+            }, 2000);
+        } else {
+            result.innerText = "❌ " + JSON.stringify(resData);
+        }
+    });
+  </script>
+</body>
+</html>
+

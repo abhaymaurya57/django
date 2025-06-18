@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+</head>
+<body>
+    <h2>User Login</h2>
+    <form id="loginForm">
+        <input type="email" id="email" placeholder="Email" required><br><br>
+        <input type="password" id="password" placeholder="Password" required><br><br>
+        <button type="submit">Login</button>
+    </form>
+
+    <div id="result"></div>
+
+    <script>
+    const form = document.getElementById("loginForm");
+    const result = document.getElementById("result");
+
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const data = {
+            email: document.getElementById("email").value,
+            password: document.getElementById("password").value
+        };
+
+        const response = await fetch("http://127.0.0.1:8000/api/user/login/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
+
+        const resData = await response.json();
+        if (response.ok) {
+            result.innerText = "✅ " + resData.msg;
+            localStorage.setItem("accessToken", resData.token.access);
+            localStorage.setItem("refreshToken", resData.token.refresh);
+            // Redirect to profile page after login
+            setTimeout(() => {
+                window.location.href = "/profile-temp/";
+            }, 2000);
+        } else {
+            result.innerText = "❌ " + JSON.stringify(resData);
+        }
+    });
+</script>
+
+</body>
+</html>
