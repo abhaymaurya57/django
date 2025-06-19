@@ -8,6 +8,7 @@ from .renders import UserRenderer
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.exceptions import AuthenticationFailed
 from rest_framework.permissions import IsAuthenticated
+from .models import User
 
 # Create your views here.
 
@@ -21,14 +22,15 @@ def get_tokens_for_user(user):
         'access': str(refresh.access_token),
     }
 
-
 class UserRegistationView(APIView):
     renderer_classes = [UserRenderer]
+    print(renderer_classes)
     def post(self,request,format=None):
         serializer = UserRegistrationSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             user = serializer.save()
             token = get_tokens_for_user(user)
+            print(token)
             return Response({'token':token,'msg':'registation successful'},status=status.HTTP_201_CREATED)
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
     
@@ -42,9 +44,18 @@ class UserLoginView(APIView):
             user = authenticate(email=email,password=password)
             if user is not None:
                 token = get_tokens_for_user(user)
-                return Response({'token':token,'msg':'login  successful'},status=status.HTTP_200_OK)
+                # Role-based response
+            if user.is_superuser:
+                role = 'admin'
+            elif user.is_staff:
+                role = 'staff'
             else:
-                return Response({'error':{'non_field':['email and password is not valid']}},status=status.HTTP_404_NOT_FOUND)
+                role = 'user'
+
+            return Response({'token': token, 'role': role, 'msg': 'Login successful'}, status=status.HTTP_200_OK)
+                
+        else:
+            return Response({'error':{'non_field':['email and password is not valid']}},status=status.HTTP_404_NOT_FOUND)
             
 class UserProfileView(APIView):
     renderer_classes = [UserRenderer]
@@ -52,11 +63,6 @@ class UserProfileView(APIView):
     def get(self,request,format=None):
         serializer = UserProfileSerilizer(request.user)
         return Response(serializer.data,status=status.HTTP_200_OK)
-# class UserProfileView(APIView):
-#     permission_classes = [IsAuthenticated]
-#     def get(self, request, format=None):
-#         serializer = UserProfileSerilizer(request.user)
-#         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class UserChangePassword(APIView):
     renderer_classes = [UserRenderer]
@@ -85,18 +91,32 @@ class UserPasswordResetView(APIView):
         if serializer.is_valid(raise_exception=True):
             return Response({'msg':'password reset successfully'},status=status.HTTP_200_OK)
 
-
 from django.shortcuts import render
 
 def register_template_view(request):
-    return render(request, 'register.html')
+    return render(request, 'account/register.html')
+
 def login_template_view(request):
-    return render(request, 'login.html')
+    return render(request, 'account/login.html')
+
 def profile_template_view(request):
-    return render(request, 'profile.html')
+    chais=User.objects.all()
+    return render(request, 'account/base.html',{'chais': chais})
+
 def change_password_view(request):
-    return render(request, 'change_password.html')
+    return render(request, 'account/change_password.html')
+
 def send_reset_email_view(request):
-    return render(request, 'send_reset_email.html')
+    return render(request, 'account/send_reset_email.html')
+    
 def reset_password_template_view(request, uid, token):
-    return render(request, 'reset_password.html', {'uid': uid, 'token': token})
+    return render(request, 'account/reset_password.html', {'uid': uid, 'token': token})
+
+def admin_dashboard_view(request):
+    return render(request, 'account/admin_dashboard.html')
+
+def staff_dashboard_view(request):
+    return render(request, 'account/staff_dashboard.html')
+
+def user_dashboard_view(request):
+    return render(request, 'account/user_dashboard.html')

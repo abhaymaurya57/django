@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Client Tree{% endblock %}
+{% block content %}
+<h2>Client Structure</h2>
+<ul>
+  <li>Company A
+    <ul>
+      <li>Branch 1</li>
+      <li>Branch 2
+        <ul>
+          <li>Team A</li>
+          <li>Team B</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Company B</li>
+</ul>
+{% endblock %}

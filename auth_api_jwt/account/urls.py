@@ -11,8 +11,6 @@ urlpatterns = [
     path('sent_reset_password_email/',SendPasswordResetEmailView.as_view(), name='send-reset-password-email'),
     path('reset-password/<uid>/<token>/',UserPasswordResetView.as_view(),name="reset_password"),
     
-
-
     # frontent connect backend
 
 
@@ -22,5 +20,9 @@ urlpatterns = [
     path('change-password/', change_password_view, name='change-password'),
     path('send-reset-email/', send_reset_email_view, name='send-reset-email'),
     path('reset-password/<uid>/<token>/', reset_password_template_view, name='reset-password'),
-]
 
+    # path('dashboard/', dashboard_view, name='dashboard')
+    path('admin-dashboard/', admin_dashboard_view, name='admin-dashboard'),
+    path('staff-dashboard/', staff_dashboard_view, name='staff-dashboard'),
+    path('user-dashboard/', user_dashboard_view, name='user-dashboard'),
+]

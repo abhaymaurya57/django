@@ -1,0 +1,50 @@
+<!-- templates/account/profile.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>User Profile</title>
+</head>
+<body>
+  <h2>Your Profile</h2>
+  <pre id="profileData">Loading...</pre>
+
+  <button onclick="logout()">Logout</button>
+
+  <script>
+    async function fetchProfile() {
+      const token = localStorage.getItem('access');
+      
+      if (!token) {
+        alert('You are not logged in');
+        window.location.href = 'http://127.0.0.1:8000/api/user/login-form/';
+        return;
+      }
+
+      const res = await fetch('http://127.0.0.1:8000/api/user/profile/', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        document.getElementById('profileData').innerText = JSON.stringify(data, null, 2);
+      } else {
+        document.getElementById('profileData').innerText = '❌ Failed to load profile';
+        if (res.status === 401) {
+          alert('Session expired. Please login again.');
+          window.location.href = 'http://127.0.0.1:8000/api/user/login-form/';
+        }
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem('access');
+      localStorage.removeItem('refresh');
+      window.location.href = 'http://127.0.0.1:8000/api/user/login-form/';
+    }
+
+    fetchProfile();
+  </script>
+</body>
+</html>

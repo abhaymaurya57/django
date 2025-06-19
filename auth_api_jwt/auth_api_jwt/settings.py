@@ -30,8 +30,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     "corsheaders",
-    'otp_email',
-    'jwt_app',
 
 ]
 
@@ -138,4 +136,4 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:8000",
 ] 
 
-AUTH_USER_MODEL='account.User'
+AUTH_USER_MODEL = 'account.User'

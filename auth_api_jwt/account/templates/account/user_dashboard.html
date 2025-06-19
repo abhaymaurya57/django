@@ -1,0 +1,20 @@
+<!-- account/templates/account/staff_dashboard.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>User Dashboard</title>
+</head>
+<body>
+  <h1>Welcome, User!</h1>
+  <p>This is your dashboard.</p>
+  <button onclick="logout()">Logout</button>
+
+  <script>
+    function logout() {
+      localStorage.removeItem('access');
+      localStorage.removeItem('refresh');
+      window.location.href = '/api/user/login-form/';
+    }
+  </script>
+</body>
+</html>
