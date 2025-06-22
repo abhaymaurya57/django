@@ -1,15 +1,67 @@
-<!-- account/templates/account/staff_dashboard.html -->
-<!DOCTYPE html>
-<html>
-<head>
-  <title>User Dashboard</title>
-</head>
-<body>
-  <h1>Welcome, User!</h1>
-  <p>This is your dashboard.</p>
-  <button onclick="logout()">Logout</button>
 
-  <script>
+{% extends "account/base.html" %}
+{% load static %}
+
+{% block content %}<body>
+  <h1>Welcome, Student!</h1>
+  <p>This is your dashboard.</p>
+  <h1>The form element</h1>
+
+<div class="justify-center text-justify">
+<form id="studentForm">
+  <input type="text" name="name" required><br>
+  <input type="text" name="father_name" required><br>
+  <input type="number" name="age" required><br>
+  <input type="number" name="clss" required><br>
+  <select name="course" id="courseSelect"></select><br>
+  <input type="text" name="address" required><br>
+  <input type="text" name="comment"><br>
+  <button type="submit">Submit</button>
+</form>
+<div id="message"></div>
+
+
+</div>
+<script>
+fetch('/api/user/courses/')
+  .then(res => res.json())
+  .then(data => {
+    const select = document.getElementById('courseSelect');
+    data.forEach(c => {
+      const opt = document.createElement('option');
+      opt.value = c.id;
+      opt.textContent = `${c.name}`;
+      select.appendChild(opt);
+    });
+  });
+
+document.getElementById('studentForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const form = e.target;
+  const student = {
+    name: form.name.value,
+    father_name: form.father_name.value,
+    age: form.age.value,
+    clss: form.clss.value,
+    course: form.course.value,
+    address: form.address.value,
+    comment: form.comment.value
+  };
+
+  const res = await fetch('/api/user/students/', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' ,'Authorization': 'Bearer ' + localStorage.getItem('access')},
+    body: JSON.stringify(student)
+  });
+
+  const result = await res.json();
+  document.getElementById('message').innerText = res.ok
+    ? '✅ Student registered successfully!'
+    : '❌ Error: ' + JSON.stringify(result);
+});
+
+
+#jwt token
     function logout() {
       localStorage.removeItem('access');
       localStorage.removeItem('refresh');
@@ -17,4 +69,4 @@
     }
   </script>
 </body>
-</html>
+{% endblock %}

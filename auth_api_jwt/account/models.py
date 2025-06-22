@@ -77,3 +77,27 @@ class User(AbstractBaseUser):
         "Is the user a member of staff?"
         # Simplest possible answer: All admins are staff
         return self.is_admin
+
+class Course(models.Model):
+    name = models.CharField(max_length=100)
+    code = models.CharField(max_length=10, unique=True)
+    description = models.TextField(blank=True)
+    credit = models.IntegerField()
+    start_date = models.DateField()
+    end_date = models.DateField()    
+
+    def __str__(self):
+        return f"{self.code} - {self.name}"
+
+        
+class Student(models.Model):
+    name=models.CharField(max_length=220)
+    father_name=models.CharField(max_length=40)
+    age=models.IntegerField()
+    clss=models.IntegerField()
+    course=models.ForeignKey(Course, on_delete=models.CASCADE)
+    address=models.CharField(max_length=200)
+    comment=models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name

@@ -1,10 +1,10 @@
-<!-- account/templates/account/staff_dashboard.html -->
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Staff Dashboard</title>
-</head>
+
+{% extends "account/base.html" %}
+{% load static %}
+
+{% block content %}
 <body>
+  <body>
   <h1>Welcome, Staff!</h1>
   <p>This is your dashboard.</p>
   <button onclick="logout()">Logout</button>
@@ -17,4 +17,5 @@
     }
   </script>
 </body>
-</html>
+</body>
+{% endblock %}

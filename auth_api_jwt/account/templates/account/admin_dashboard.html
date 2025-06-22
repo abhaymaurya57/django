@@ -1,20 +1,21 @@
-<!-- account/templates/account/staff_dashboard.html -->
-<!DOCTYPE html>
-<html>
-<head>
-  <title>admin Dashboard</title>
-</head>
-<body>
-  <h1>Welcome, admin!</h1>
-  <p>This is your dashboard.</p>
-  <button onclick="logout()">Logout</button>
+{% extends "account/base.html" %}
+{% load static %}
+
+{% block content %}
+  <div class="container mt-5">
+    <h1 class="mb-3">Welcome, admin! 👋</h1>
+    <p>This is your dashboard.</p>
+    <button class="btn btn-danger mt-3" onclick="logout()">Logout</button>
+  </div>
 
   <script>
     function logout() {
-      localStorage.removeItem('access');
-      localStorage.removeItem('refresh');
-      window.location.href = '/api/user/login-form/';
+      if (confirm("Are you sure you want to log out?")) {
+        localStorage.removeItem('access');
+        localStorage.removeItem('refresh');
+        window.location.href = '/api/user/login-form/';
+      }
     }
   </script>
-</body>
-</html>
+{% endblock %}
+

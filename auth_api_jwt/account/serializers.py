@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework import serializers
-from account.models import User
+from account.models import User,Student,Course
 from django.utils.encoding import smart_str, force_bytes, smart_bytes, DjangoUnicodeDecodeError
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
@@ -99,3 +99,13 @@ class UserPasswordResetSerializer(serializers.Serializer):
             PasswordResetTokenGenerator().check_token(user,token)
             raise validationError('token is not valid or expired')
         
+
+class CourseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Course
+        fields = '__all__'
+
+class StudentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Student
+        fields = '__all__'

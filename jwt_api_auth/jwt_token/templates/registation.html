@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register</title>
+</head>
+<body>
+    <h2>Register User</h2>
+    <form id="registerForm">
+        <label>Role:</label>
+        <select id="role">
+            <option value="admin">Admin</option>
+            <option value="staff">Staff</option>
+            <option value="student">Student</option>
+        </select><br>
+
+        <label>Name:</label><input type="text" id="name" required><br>
+        <label>Email:</label><input type="email" id="email" required><br>
+        <label>Phone Number:</label><input type="text" id="phonenumber" required><br>
+        <label>User ID:</label><input type="text" id="userid" required><br>
+        <label>Password:</label><input type="password" id="password" required><br>
+
+        <div id="extraFields"></div>
+
+        <button type="submit">Register</button>
+    </form>
+
+    <script>
+        const roleField = document.getElementById('role');
+        const extraFields = document.getElementById('extraFields');
+
+        // Show additional fields based on role
+        roleField.addEventListener('change', function () {
+            const role = roleField.value;
+            extraFields.innerHTML = '';
+
+            if (role === 'student') {
+                extraFields.innerHTML = `
+                    <label>Roll No:</label>
+                    <input type="text" id="roll_no" required><br>`;
+            } else if (role === 'staff') {
+                extraFields.innerHTML = `
+                    <label>Department:</label>
+                    <input type="text" id="department" required><br>`;
+            }
+        });
+
+        // Set default extra field on page load
+        roleField.dispatchEvent(new Event('change'));
+
+        // Submit handler
+        document.getElementById('registerForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const role = document.getElementById('role').value;
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phonenumber = document.getElementById('phonenumber').value;
+            const userid = document.getElementById('userid').value;
+            const password = document.getElementById('password').value;
+
+            let payload = { name, email, phonenumber, userid, password };
+
+            if (role === 'student') {
+                const rollNo = document.getElementById('roll_no')?.value;
+                if (!rollNo) return alert("❌ Roll No is required for students.");
+                payload.roll_no = rollNo;
+            } else if (role === 'staff') {
+                const department = document.getElementById('department')?.value;
+                if (!department) return alert("❌ Department is required for staff.");
+                payload.department = department;
+            }
+
+            console.log("🧾 Payload Sent:", payload);
+
+            try {
+                const response = await fetch(`/api/register/${role}/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+                console.log("📨 Server Response:", data);
+
+                if (response.ok) {
+                    alert(`${role.charAt(0).toUpperCase() + role.slice(1)} registered successfully! Redirecting...`);
+                    window.location.href = "/"; // ✅ Redirect to base.html
+                } else {
+                    alert("❌ Registration failed:\n" + JSON.stringify(data));
+                }
+            } catch (error) {
+                console.error("🔥 Fetch error:", error);
+                alert("Something went wrong. Please try again.");
+            }
+        });
+    </script>
+</body>
+</html>

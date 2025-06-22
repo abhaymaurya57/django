@@ -13,8 +13,8 @@ urlpatterns = [
     
     # frontent connect backend
 
-
-    path('register-form/', register_template_view, name='register-form'),
+    path("",base,name='base'),
+    path('register-form', register_template_view, name='register-form'),
     path('login-form/', login_template_view, name='login-form'),
     path('profile-temp/', profile_template_view, name='profile'),
     path('change-password/', change_password_view, name='change-password'),
@@ -25,4 +25,7 @@ urlpatterns = [
     path('admin-dashboard/', admin_dashboard_view, name='admin-dashboard'),
     path('staff-dashboard/', staff_dashboard_view, name='staff-dashboard'),
     path('user-dashboard/', user_dashboard_view, name='user-dashboard'),
+
+    path('courses/', CourseListAPI.as_view(), name='course-list'),
+    path('students/', StudentCreateAPI.as_view(), name='student-create'),
 ]
