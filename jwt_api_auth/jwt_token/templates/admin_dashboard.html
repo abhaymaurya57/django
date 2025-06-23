@@ -1,0 +1,139 @@
+{% load static %}
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard</title>
+  {% tailwind_css %}
+</head>
+<h1 class=""></h1>
+<body class="bg-gray-100 min-h-screen p-6">
+
+  <div class="flex justify-between items-center mb-6">
+    <h2 class="text-4xl font-bold text-center text-purple-800"> Admin Dashboard</h2>
+    <button onclick="logout()" class="bg-red-600 text-white px-4 py-2 rounded-lg">Logout</button>
+    
+  </div>
+ <h2 class="text-4xl font-bold text-center text-blue-600"> Student Register </h2>
+  <div id="card-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    <!-- JS will populate cards here -->
+  </div>
+
+  <!-- Edit Modal -->
+  <div id="editModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+    <div class="bg-white p-6 rounded-lg w-full max-w-md">
+      <h2 class="text-xl font-bold mb-4">Edit Student</h2>
+      <form id="editForm">
+        <input type="hidden" id="editId">
+        <input type="text" id="editName" placeholder="Name" class="w-full p-2 border mb-2">
+        <input type="number" id="editAge" placeholder="Age" class="w-full p-2 border mb-2">
+        <input type="text" id="editClass" placeholder="Class" class="w-full p-2 border mb-2">
+        <input type="text" id="editAddress" placeholder="Address" class="w-full p-2 border mb-2">
+        <input type="text" id="editPhone" placeholder="Phone" class="w-full p-2 border mb-2">
+        <input type="email" id="editEmail" placeholder="Email" class="w-full p-2 border mb-4">
+        <div class="flex justify-between">
+          <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Save</button>
+          <button type="button" onclick="closeModal()" class="bg-gray-400 text-white px-4 py-2 rounded">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    async function fetchStudents() {
+      const res = await fetch("/api/students/");
+      const data = await res.json();
+      const container = document.getElementById("card-container");
+      container.innerHTML = "";
+
+      data.forEach(user => {
+        container.innerHTML += `
+          <div class="bg-white shadow-lg rounded-2xl p-6">
+            <h3 class="text-xl font-semibold text-blue-600 mb-2">${user.name}</h3>
+            <p><strong>Age:</strong> ${user.age}</p>
+            <p><strong>Class:</strong> ${user.student_class}</p>
+            <p><strong>Address:</strong> ${user.address}</p>
+            <p><strong>Phone:</strong> ${user.phone}</p>
+            <p><strong>Email:</strong> ${user.email}</p>
+
+            <div class="mt-4 flex justify-between">
+              <button onclick="openEditModal(${user.id}, '${user.name}', ${user.age}, '${user.student_class}', '${user.address}', '${user.phone}', '${user.email}')" class="bg-yellow-400 hover:bg-yellow-500 text-white px-4 py-2 rounded-lg">✏️ Edit</button>
+              <button onclick="deleteStudent(${user.id})" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg">🗑️ Delete</button>
+            </div>
+          </div>`;
+      });
+    }
+
+    function openEditModal(id, name, age, studentClass, address, phone, email) {
+      document.getElementById("editId").value = id;
+      document.getElementById("editName").value = name;
+      document.getElementById("editAge").value = age;
+      document.getElementById("editClass").value = studentClass;
+      document.getElementById("editAddress").value = address;
+      document.getElementById("editPhone").value = phone;
+      document.getElementById("editEmail").value = email;
+      document.getElementById("editModal").classList.remove("hidden");
+      document.getElementById("editModal").classList.add("flex");
+    }
+
+    function closeModal() {
+      document.getElementById("editModal").classList.add("hidden");
+      document.getElementById("editModal").classList.remove("flex");
+    }
+
+    document.getElementById("editForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const id = document.getElementById("editId").value;
+      const body = {
+        name: document.getElementById("editName").value,
+        age: document.getElementById("editAge").value,
+        student_class: document.getElementById("editClass").value,
+        address: document.getElementById("editAddress").value,
+        phone: document.getElementById("editPhone").value,
+        email: document.getElementById("editEmail").value,
+      };
+      await fetch(`/api/students/${id}/`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      closeModal();
+      fetchStudents();
+    });
+
+    async function deleteStudent(id) {
+      if (confirm("Delete this student?")) {
+        await fetch(`/api/students/${id}/`, { method: "DELETE" });
+        fetchStudents();
+      }
+    }
+
+    fetchStudents();
+
+    const token = localStorage.getItem('access_token');
+    const role = localStorage.getItem('user_role');
+
+    if (!token || role !== 'admin') {
+      window.location.href = '/adminn/login/';
+    }
+
+  function isTokenExpired(token) {
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return Math.floor(Date.now() / 1000) >= payload.exp;
+    } catch (e) {
+      return true;
+    }
+  }
+
+    function logout() {
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('refresh_token');
+      localStorage.removeItem('user_role');
+      window.location.href = '/';
+    }
+  </script>
+</body>
+</html>

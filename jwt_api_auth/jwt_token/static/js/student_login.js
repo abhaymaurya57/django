@@ -1,30 +1,38 @@
-document.getElementById("loginForm")?.addEventListener("submit", async function (e) {
+document.getElementById('loginForm').addEventListener('submit', async function (e) {
   e.preventDefault();
 
-  const userid = document.getElementById("userid").value;
-  const password = document.getElementById("password").value;
+  const userid = document.getElementById('userid').value;
+  const password = document.getElementById('password').value;
 
   try {
-    const res = await fetch("/api/login/student/", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userid, password }),
+    const response = await fetch('/api/student-login/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userid, password })  // ✅ using userid, not email
     });
 
-    const data = await res.json();
+    const data = await response.json();
 
-    if (res.ok && data.access) {
-      localStorage.setItem("access", data.access);
-      localStorage.setItem("refresh", data.refresh);
-      alert("✅ Login successful!");
-      window.location.href = "/student/dashboard/";
+    if (response.ok) {
+      // ✅ Store tokens in localStorage
+      localStorage.setItem('access_token', data.access);
+      localStorage.setItem('refresh_token', data.refresh);
+      localStorage.setItem('user_role', 'student');
+
+      // ✅ Redirect to dashboard
+      window.location.href = '/student/dashboard/';
     } else {
-      alert("❌ Login failed: " + (data.detail || "Invalid credentials"));
+      alert(data.detail || "Login failed");
     }
-  } catch (err) {
-    alert("⚠️ Error logging in. Please try again.");
+
+  } catch (error) {
+    console.error('Login error:', error);
+    alert("Something went wrong. Please try again.");
   }
 });
+
+
+
 
 
     // <script>

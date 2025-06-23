@@ -4,37 +4,38 @@ from rest_framework_simplejwt.views import TokenRefreshView
 from .views import UserRegisterView
 from .views import (
     RegisterAdminView, RegisterStaffView, RegisterStudentView,
-    AdminLoginView, StaffLoginView,StudentLoginView, StaffLoginView,AdminLoginView,studentformregister
+    AdminLoginView, StaffLoginView,StudentLoginView, StaffLoginView,AdminLoginView,studentformregister,
+    StudentListCreateAPIView,StudentRetrieveUpdateDestroyAPIView,
 )
 from .views import StudentLogin
 
 urlpatterns = [
-
-    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-
-    #templates of base page
-    path("",views.base,name="base"),
-
-    #Student Admin Staff register
-    path('register/', UserRegisterView.as_view(), name='register'),
-
-    # templates of login
+    # Page Routes
+    path('', views.base, name='base'),
+    path('adminn/login/', views.adminlogin, name='admin_login'),
+    path('staff/login/', views.stafflogin, name='staff_login'),
     path('student/login/', views.StudentLogin, name='student_login'),
-    path('staff/login/', StaffLoginView.as_view(), name='staff_login'),
-    path("adminn/login/", views.adminlogin,name='adminlogin'),
+    path('adminndashboard/', views.admindashboard, name='admin_dashboard'),
+    path('staff/dashboard/', views.staffdashboard, name='staff_dashboard'),
+    path('student/dashboard/', views.studentform, name='student_dashboard'),
 
-    #serilizers and views
-    path('api/register/admin/', RegisterAdminView.as_view(), name='register_admin'),
-    path('api/register/staff/', RegisterStaffView.as_view(), name='register_staff'),
-    path('api/register/student/', RegisterStudentView.as_view(), name='register_student'),
-     path('api/register-student/', studentformregister.as_view(), name='api-register-student'),
+    # API Routes
+    path('api/login/admin/', views.AdminLoginView.as_view(), name='admin_login_api'),
+    path('api/staff-login/', views.StaffLoginView.as_view(), name='staff_login_api'),
+    path('api/student-login/', views.StudentLoginView.as_view(), name='student_login_api'),
+    path('api/student-form/', views.studentformregister.as_view(), name='student_form_api'),
 
-    # Login Endpoints
-    path('api/login/admin/', AdminLoginView.as_view(), name='login_admin'),
-    path('api/login/staff/', StaffLoginView.as_view(), name='login_staff'),
-    path('api/login/student/', StudentLoginView.as_view(), name='login_student'),
+    # Registration
+    path('api/register-admin/', views.RegisterAdminView.as_view(), name='register_admin'),
+    path('api/register-staff/', views.RegisterStaffView.as_view(), name='register_staff'),
+    path('api/register-student/', views.RegisterStudentView.as_view(), name='register_student'),
 
-    #dashboard templates
-    path('student/dashboard/',views.studentform,name='studentdashboard'),
-    path('adminn/dashboard/',views.admindashboard,name="admindashboard"),
+    #admin edit and delete 
+    path('api/students/', StudentListCreateAPIView.as_view(), name='student_list_create'),
+    path('api/students/<int:pk>/', StudentRetrieveUpdateDestroyAPIView.as_view(), name='student_detail'),
+   
+    #student profile
+    path('api/student-profile/', views.StudentProfileAPIView.as_view(), name='student_profile_api'),
+    path('profile/', views.student_profile_page, name='student_profile_page'),
+
 ]

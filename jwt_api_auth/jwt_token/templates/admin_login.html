@@ -1,3 +1,4 @@
+{% load static %}
 <html>
 <head>
     <title>Admin Login</title>
@@ -9,6 +10,9 @@
         <input type="password" id="admin_password" placeholder="Password" required><br>
         <button type="submit">Login</button>
     </form>
+
+    <!-- Optional: Use external JS -->
+    {% comment %} <script src="{% static 'js/admin_login.js' %}"></script> {% endcomment %}
 
     <script>
         function loginAdmin(event) {
@@ -24,13 +28,18 @@
             .then(res => res.json())
             .then(data => {
                 if (data.access) {
-                    localStorage.setItem("access", data.access);
-                    localStorage.setItem("refresh", data.refresh);
+                    localStorage.setItem("access_token", data.access);  // match with dashboard check
+                    localStorage.setItem("refresh_token", data.refresh);
+                    localStorage.setItem("user_role", "admin");          // 🟢 This was missing
                     alert("✅ Admin Logged in Successfully");
-                    window.location.href = "/adminn/dashboard/";
+                    window.location.href = "/adminndashboard/";
                 } else {
                     alert("❌ Login Failed: " + (data.detail || "Invalid credentials"));
                 }
+            })
+            .catch(err => {
+                console.error("Login error:", err);
+                alert("❌ Something went wrong during login.");
             });
         }
     </script>

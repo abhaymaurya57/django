@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
+from django.conf import settings
 
 ROLE_CHOICES = (
     ('admin', 'Admin'),
@@ -88,6 +89,7 @@ class Staff(models.Model):
         return f"Staff: {self.user.name}"
 
 class StudentRegistr(models.Model):
+    user = models.OneToOneField(MyUser, on_delete=models.CASCADE, null=True, blank=True)
     name = models.CharField(max_length=100)
     age = models.IntegerField()
     student_class = models.CharField(max_length=50)

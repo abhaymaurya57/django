@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -40,11 +40,23 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'jwt_token',
+    'tailwind',
+    'theme',
+    'django_browser_reload',
+    'api',
+
+
 ]
+
+TAILWIND_APP_NAME = 'theme'
+
+
+NPM_BIN_PATH = os.path.join("C:/Program Files/nodejs/npm.cmd")
 
 AUTH_USER_MODEL = 'jwt_token.MyUser'
 
 MIDDLEWARE = [
+    "django_browser_reload.middleware.BrowserReloadMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -59,7 +71,7 @@ ROOT_URLCONF = 'jwt_api_auth.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],
+        'DIRS': [BASE_DIR / "templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -141,12 +153,11 @@ REST_FRAMEWORK = {
     ),
 }
 
-
 from datetime import timedelta
 ...
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=1),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     "ROTATE_REFRESH_TOKENS": False,
     "BLACKLIST_AFTER_ROTATION": False,

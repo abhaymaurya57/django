@@ -62,4 +62,12 @@ class studentformserializer(serializers.ModelSerializer):
         model=StudentRegistr
         fields="__all__"
     
+class StudentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StudentRegistr
+        fields = '__all__'
 
+class StudentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StudentRegistr
+        fields = ['name', 'age', 'student_class', 'address', 'phone', 'email']

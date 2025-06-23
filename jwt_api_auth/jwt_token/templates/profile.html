@@ -1,0 +1,92 @@
+{% comment %} {% extends "std_dash_base.html" %}
+{% load static %}
+{% block main %}
+
+  <!-- Edit Modal -->
+{% for user in users %}
+
+{% endfor %}
+
+{% endblock main %} {% endcomment %}
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Student Profile</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"/>
+</head>
+<body class="bg-light">
+
+<nav class="navbar navbar-expand-lg bg-primary">
+  <div class="container-fluid">
+    <a class="navbar-brand text-white" href="#">Student</a>
+    <button class="btn btn-danger" onclick="logout()">Logout</button>
+  </div>
+</nav>
+
+<div class="container mt-4">
+  <h3 class="mb-4">👤 Your Profile</h3>
+
+  <div class="card">
+    <div class="card-body" id="profileContent">
+      Loading...
+    </div>
+  </div>
+</div>
+
+<script>
+  const token = localStorage.getItem('access_token');
+  const role = localStorage.getItem('user_role');
+
+  if (!token || role !== 'student' || isTokenExpired(token)) {
+    localStorage.clear();
+    window.location.href = '/student/login/';
+  }
+
+  function isTokenExpired(token) {
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return Math.floor(Date.now() / 1000) >= payload.exp;
+    } catch (e) {
+      return true;
+    }
+  }
+
+  function logout() {
+    localStorage.clear();
+    window.location.href = '/student/login/';
+  }
+
+  // 🔍 Fetch student's own profile
+  async function loadProfile() {
+    const res = await fetch("/api/student-profile/", {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + token
+      }
+    });
+
+    const data = await res.json();
+    const div = document.getElementById("profileContent");
+
+    if (res.ok) {
+      div.innerHTML = `
+        <p><strong>Name:</strong> ${data.name}</p>
+        <p><strong>Age:</strong> ${data.age}</p>
+        <p><strong>Class:</strong> ${data.student_class}</p>
+        <p><strong>Address:</strong> ${data.address}</p>
+        <p><strong>Phone:</strong> ${data.phone}</p>
+        <p><strong>Email:</strong> ${data.email}</p>
+      `;
+    } else {
+      div.innerHTML = `<p class="text-danger">Failed to load profile: ${JSON.stringify(data)}</p>`;
+    }
+  }
+
+  loadProfile();
+</script>
+
+</body>
+</html>
