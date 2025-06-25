@@ -1,26 +1,35 @@
 from django.db import models
 
-# Create your models here.
-class Teacher(models.Model):
-    name=models.CharField(max_length=256)
-    surname=models.CharField(max_length=256)
-    title=models.CharField(max_length=16,blank=True)
-    created = models.DateTimeField(auto_now_add=True)
-    
-    class Meta:
-        ordering=["created"]
-
-    def __str__(self):
-        return f"{self.name} - {self.surname}"
-
-class Subject(models.Model):
-    name=models.CharField(max_length=256)
+class student(models.Model):
+    name=models.CharField(max_length=220)
     age=models.IntegerField()
-    created = models.DateTimeField(auto_now_add=True)
-    teacher=models.ForeignKey(Teacher,related_name="subject",on_delete=models.CASCADE)
+    classs=models.IntegerField()
 
     def __str__(self):
-        return f"NAME: {self.name},ABBREV;{self.age}"
-    
-    class Meta:
-        ordering=["created"]
+        return self.name
+
+class Cource(models.Model):
+    cource_name=models.CharField(max_length=50)
+    cource_is=models.IntegerField()
+    publish_date=models.IntegerField()
+
+class Stud(models.Model):
+    name=models.CharField(max_length=50)
+    roll=models.IntegerField()
+    city=models.CharField(max_length=50)
+
+class Author(models.Model):
+    name=models.CharField(max_length=50)
+    age=models.IntegerField()
+    email=models.EmailField()
+
+    def __str__(self):
+        return self.name
+
+class Book(models.Model):
+    author = models.ForeignKey(Author, related_name='books', on_delete=models.CASCADE)
+    title = models.CharField(max_length=200)
+    published_year = models.IntegerField(null=True, blank=True)
+
+    def __str__(self):
+        return self.title

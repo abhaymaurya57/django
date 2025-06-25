@@ -14,7 +14,7 @@ urlpatterns = [
     # frontent connect backend
 
     path("",base,name='base'),
-    path('register-form', register_template_view, name='register-form'),
+    path('register-form/', register_template_view, name='register-form'),
     path('login-form/', login_template_view, name='login-form'),
     path('profile-temp/', profile_template_view, name='profile'),
     path('change-password/', change_password_view, name='change-password'),

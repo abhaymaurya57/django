@@ -1,10 +1,9 @@
+from django.urls import path
 from . import views
-from django.urls import path,include
-from rest_framework.routers import DefaultRouter
-
-router=DefaultRouter()
-router.register('teachers',views.TeacherViewset)
-router.register('subjects',views.subjectviewset)
 urlpatterns = [
-    path('',include(router.urls)),
+    path("std/",views.StudentRegister.as_view(),name="studentregister"),
+    path("cource/",views.courceregister.as_view(),name="courceregister"),
+    path('stud/',views.student_api),
+    path('stud/<int:pk>/',views.student_api),
+    path('authors/', views.AuthorCreateView.as_view(), name='author-create'),
 ]

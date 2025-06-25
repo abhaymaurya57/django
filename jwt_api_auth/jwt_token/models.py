@@ -8,7 +8,6 @@ ROLE_CHOICES = (
     ('student', 'Student'),
 )
 
-# ✅ Custom User Manager
 class MyUserManager(BaseUserManager):
     def create_user(self, email, name, phonenumber, userid, password=None, role=None):
         if not email:
@@ -58,8 +57,8 @@ class MyUser(AbstractBaseUser):
 
     objects = MyUserManager()
 
-    USERNAME_FIELD = 'userid'
-    REQUIRED_FIELDS = ['email', 'name', 'phonenumber']
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['name', 'phonenumber', 'userid']
 
     def __str__(self):
         return self.userid
@@ -99,3 +98,7 @@ class StudentRegistr(models.Model):
 
     def __str__(self):
         return self.name
+
+from django.contrib.auth.backends import ModelBackend
+from django.contrib.auth import get_user_model
+

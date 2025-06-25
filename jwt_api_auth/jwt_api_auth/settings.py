@@ -55,6 +55,8 @@ NPM_BIN_PATH = os.path.join("C:/Program Files/nodejs/npm.cmd")
 
 AUTH_USER_MODEL = 'jwt_token.MyUser'
 
+# AUTHENTICATION_BACKENDS = ['jwt_token.backends.EmailBackend']
+
 MIDDLEWARE = [
     "django_browser_reload.middleware.BrowserReloadMiddleware",
     'django.middleware.security.SecurityMiddleware',
@@ -157,7 +159,7 @@ from datetime import timedelta
 ...
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=10),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     "ROTATE_REFRESH_TOKENS": False,
     "BLACKLIST_AFTER_ROTATION": False,

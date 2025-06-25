@@ -11,6 +11,7 @@ from .views import StudentLogin
 
 urlpatterns = [
     # Page Routes
+    path('register/',views.UserRegisterView.as_view(),name='register'),
     path('', views.base, name='base'),
     path('adminn/login/', views.adminlogin, name='admin_login'),
     path('staff/login/', views.stafflogin, name='staff_login'),

@@ -1,36 +1,42 @@
-document.getElementById('loginForm').addEventListener('submit', async function (e) {
-  e.preventDefault();
+document.addEventListener('DOMContentLoaded', function () {
+  const loginForm = document.getElementById('loginForm');
 
-  const userid = document.getElementById('userid').value;
-  const password = document.getElementById('password').value;
+  if (loginForm) {
+    loginForm.addEventListener('submit', async function (e) {
+      e.preventDefault();
 
-  try {
-    const response = await fetch('/api/student-login/', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userid, password })  // ✅ using userid, not email
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      try {
+        const response = await fetch('/api/student-login/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          // Store tokens
+          localStorage.setItem('access_token', data.access);
+          localStorage.setItem('refresh_token', data.refresh);
+          localStorage.setItem('user_role', 'student');
+
+          // Redirect to dashboard
+          window.location.href = '/student/dashboard/';
+        } else {
+          alert(data.detail || 'Invalid email or password');
+        }
+      } catch (error) {
+        console.error('Login error:', error);
+        alert('Something went wrong. Please try again.');
+      }
     });
-
-    const data = await response.json();
-
-    if (response.ok) {
-      // ✅ Store tokens in localStorage
-      localStorage.setItem('access_token', data.access);
-      localStorage.setItem('refresh_token', data.refresh);
-      localStorage.setItem('user_role', 'student');
-
-      // ✅ Redirect to dashboard
-      window.location.href = '/student/dashboard/';
-    } else {
-      alert(data.detail || "Login failed");
-    }
-
-  } catch (error) {
-    console.error('Login error:', error);
-    alert("Something went wrong. Please try again.");
   }
 });
-
 
 
 

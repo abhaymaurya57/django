@@ -44,18 +44,42 @@ class StudentRegistrationSerializer(serializers.ModelSerializer):
 
 
 
+# from django.contrib.auth import authenticate
+# from rest_framework import serializers
+# from rest_framework.exceptions import AuthenticationFailed
+# from django.contrib.auth import get_user_model
+
+# User = get_user_model()
+
+# class LoginSerializer(serializers.Serializer):
+#     email = serializers.EmailField()
+#     password = serializers.CharField(write_only=True)
+
+#     def validate(self, data):
+#         email = data.get('email')
+#         password = data.get('password')
+
+#         user = authenticate(request=self.context.get('request'), email=email, password=password)
+
+#         if not user:
+#             raise AuthenticationFailed("Invalid credentials")
+#         if not user.is_active:
+#             raise AuthenticationFailed("User is inactive")
+
+#         data['user'] = user
+#         return data
+
+from django.contrib.auth import authenticate
+
 class LoginSerializer(serializers.Serializer):
-    userid = serializers.CharField()
+    email = serializers.EmailField()
     password = serializers.CharField(write_only=True)
 
     def validate(self, data):
-        userid = data.get('userid')
-        password = data.get('password')
-        user = authenticate(userid=userid, password=password)
-        if not user:
-            raise serializers.ValidationError("Invalid credentials")
-        data['user'] = user
-        return data
+        user = authenticate(username=data['email'], password=data['password'])  # ✅ key point
+        if user is None:
+            raise serializers.ValidationError("Invalid email or password")
+        return {"user": user}
 
 class studentformserializer(serializers.ModelSerializer):
     class Meta:

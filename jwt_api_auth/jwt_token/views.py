@@ -5,10 +5,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .serializers import (
-    AdminRegistrationSerializer,
-    StaffRegistrationSerializer,
-    StudentRegistrationSerializer,
-    LoginSerializer,
+    AdminRegistrationSerializer,StaffRegistrationSerializer,
+    StudentRegistrationSerializer,LoginSerializer,
     studentformserializer,StudentSerializer,StudentSerializer
 )
 from rest_framework.permissions import IsAuthenticated
@@ -82,6 +80,7 @@ class AdminLoginView(APIView):
             if user.role != 'admin':
                 return Response({'detail': 'Not an admin account'}, status=status.HTTP_403_FORBIDDEN)
             tokens = get_tokens_for_user(user)
+            print(tokens)
             return Response(tokens, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
 
@@ -95,22 +94,22 @@ class StaffLoginView(APIView):
             if user.role != 'staff':
                 return Response({'detail': 'Not a staff account'}, status=status.HTTP_403_FORBIDDEN)
             tokens = get_tokens_for_user(user)
+            print(tokens)
             return Response(tokens, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
 
 
-# Student Login
+
+
 class StudentLoginView(APIView):
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.validated_data['user']
-            if user.role != 'student':
-                return Response({'detail': 'Not a student account'}, status=status.HTTP_403_FORBIDDEN)
             tokens = get_tokens_for_user(user)
+            print(tokens)
             return Response(tokens, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
-
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # Student Dashboard Template View
 def studentform(request):

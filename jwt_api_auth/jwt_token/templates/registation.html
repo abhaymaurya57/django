@@ -73,7 +73,7 @@
             console.log("🧾 Payload Sent:", payload);
 
             try {
-                const response = await fetch(`/api/register/${role}/`, {
+                const response = await fetch(`/api/register-${role}/`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

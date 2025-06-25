@@ -1,47 +1,38 @@
-{% load static %}
-<html>
-<head>
-    <title>Admin Login</title>
-</head>
-<body>
-    <h2>Admin Login</h2>
-    <form onsubmit="loginAdmin(event)">
-        <input type="text" id="admin_userid" placeholder="UserID" required><br>
-        <input type="password" id="admin_password" placeholder="Password" required><br>
-        <button type="submit">Login</button>
-    </form>
+<form id="admin-login-form">
+    <input type="email" id="admin_email" placeholder="Email" required><br><br>
+    <input type="password" id="admin_password" placeholder="Password" required><br><br>
+    <button type="submit">Login</button>
+</form>
 
-    <!-- Optional: Use external JS -->
-    {% comment %} <script src="{% static 'js/admin_login.js' %}"></script> {% endcomment %}
+<script>
+    document.getElementById("admin-login-form").addEventListener("submit", function(event) {
+        event.preventDefault();
 
-    <script>
-        function loginAdmin(event) {
-            event.preventDefault();
-            const userid = document.getElementById("admin_userid").value;
-            const password = document.getElementById("admin_password").value;
+        const email = document.getElementById("admin_email").value;
+        const password = document.getElementById("admin_password").value;
 
-            fetch("/api/login/admin/", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ userid, password })
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.access) {
-                    localStorage.setItem("access_token", data.access);  // match with dashboard check
-                    localStorage.setItem("refresh_token", data.refresh);
-                    localStorage.setItem("user_role", "admin");          // 🟢 This was missing
-                    alert("✅ Admin Logged in Successfully");
-                    window.location.href = "/adminndashboard/";
-                } else {
-                    alert("❌ Login Failed: " + (data.detail || "Invalid credentials"));
-                }
-            })
-            .catch(err => {
-                console.error("Login error:", err);
-                alert("❌ Something went wrong during login.");
-            });
-        }
-    </script>
-</body>
-</html>
+        fetch("/api/login/admin/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ email, password })  // ✅ email not userid
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.access) {
+                localStorage.setItem("access_token", data.access);
+                localStorage.setItem("refresh_token", data.refresh);
+                localStorage.setItem("user_role", "admin");
+                alert("✅ Admin Logged in Successfully");
+                window.location.href = "/adminndashboard/";
+            } else {
+                alert("❌ Login Failed: " + (data.detail || "Invalid credentials"));
+            }
+        })
+        .catch(error => {
+            console.error("Login Error:", error);
+            alert("❌ Something went wrong during login.");
+        });
+    });
+</script>
