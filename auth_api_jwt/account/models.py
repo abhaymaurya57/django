@@ -89,7 +89,6 @@ class Course(models.Model):
     def __str__(self):
         return f"{self.code} - {self.name}"
 
-        
 class Student(models.Model):
     name=models.CharField(max_length=220)
     father_name=models.CharField(max_length=40)
