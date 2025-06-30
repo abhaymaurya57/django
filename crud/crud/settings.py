@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "django_browser_reload",
     'crudapp',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [

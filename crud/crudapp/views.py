@@ -2,6 +2,10 @@ from django.shortcuts import render,redirect
 from .models import Book
 from .forms import BookForm
 from django.contrib import messages
+from rest_framework.views import APIView
+from .models import Student
+from .serializers import StudentSerializer
+from rest_framework.response import Response
 
 
 def book_create(request):
@@ -40,3 +44,18 @@ def book_delete(request, pk):
     book.delete()
     messages.success(request, 'Book deleted')
     return redirect('book-list')
+
+
+class StudentData(APIView):
+    def post(self, request):
+        serializer = StudentSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"msg": "Student data saved"})
+        return Response(serializer.errors, status=400)
+
+    def get(self, request,pk=None):
+        students = Student.objects.all()
+        serializer = StudentSerializer(students, pk=pk)
+        return Response(serializer.data)
+    

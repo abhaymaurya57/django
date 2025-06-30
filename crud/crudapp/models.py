@@ -26,3 +26,14 @@ class Book(models.Model):
     def get_absolute_url(self):
         return reverse('book-details',kwargs={'pk':self.pk})
     
+class Student(models.Model):
+    name=models.CharField(max_length=225)
+    age=models.IntegerField()
+    clss=models.IntegerField()
+    descriptions=models.CharField(max_length=220)
+    created_at=models.DateTimeField(auto_now_add=True)
+    updated_at=models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return self.name
+
