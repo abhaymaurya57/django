@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load static %}
+hooii
+{% block body %}
+<div class="container mt-5">
+  <h2>Upload New Image</h2>
+
+  <form method="POST" action="/upload/" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+    <div class="mb-3">
+      <label for="img" class="form-label">Image</label>
+      <input type="file" name="img" id="img" class="form-control"multiple required>
+    </div>
+
+    <div class="mb-3">
+      <label for="title" class="form-label">Title</label>
+      <input type="text" name="title" id="title" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="description" class="form-label">Description</label>
+      <textarea name="description" id="description" class="form-control" rows="3" required></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label for="type_image" class="form-label">Image Type</label>
+      <select name="type_image" id="type_image" class="form-select" required>
+        <option value="">Select type</option>
+        <option value="BR">Birthday</option>
+        <option value="SP">Sports</option>
+        <option value="STD">Student</option>
+        <option value="TC">Teacher</option>
+        <option value="DL">Diwali</option>
+        <option value="OR">Other</option>
+      </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Upload</button>
+  </form>
+</div>
+{% endblock body %}
