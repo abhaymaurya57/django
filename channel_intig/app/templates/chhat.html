@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebSocket Chat Test</title>
+</head>
+<body>
+    <h2>WebSocket Chat</h2>
+    <textarea id="chat-log" cols="100" rows="20" readonly></textarea><br>
+    <input id="chat-message-input" type="text" size="100" placeholder="Type your message here...">
+    <button id="chat-message-send">Send</button>
+
+    <script>
+        const socket = new WebSocket("ws://127.0.0.1:8000/ws/sc/");
+
+        socket.onopen = function(e) {
+            console.log("✅ WebSocket connection established");
+            document.getElementById("chat-log").value += "🟢 Connected\n";
+        };
+
+        socket.onmessage = function(e) {
+            console.log("📩 Message from server:", e.data);
+            document.getElementById("chat-log").value += "Server: " + e.data + "\n";
+        };
+
+        socket.onclose = function(e) {
+            console.log("❌ WebSocket connection closed");
+            document.getElementById("chat-log").value += "🔴 Disconnected\n";
+        };
+
+        document.getElementById("chat-message-send").onclick = function() {
+            const input = document.getElementById("chat-message-input");
+            const message = input.value;
+            socket.send(message);
+            document.getElementById("chat-log").value += "You: " + message + "\n";
+            input.value = "";
+        };
+    </script>
+</body>
+</html>
